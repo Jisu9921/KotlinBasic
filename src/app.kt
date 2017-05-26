@@ -1,17 +1,19 @@
-fun nullableTest(a: Int?) {
-    var one: Int? = a//null 이라면 null
-    println("one : $one")
-    var two: Int = a!! //null 이라면 Exception
-    println("two : $two")
+import kotlin.properties.Delegates
 
+class User {
+    var name: String by Delegates.observable("<no name>") {
+        prop, old, new ->
+        println("$old -> $new")
+    }
 }
 
-class Member{
-    var name: String = "Jisu Choi"
+val lazyValue: String by lazy {
+    println("computed!")
+    "Hello"
 }
 
-fun nameLength(member: Member?){
-    println(member?.name?.length)
+fun messageObj(animal: Animal?){
+    println(animal?.message())
 }
 
 interface Base {
@@ -22,22 +24,32 @@ class BaseImpl(val x: Int) : Base {
     override fun print() { print(x) }
 }
 
-class Derived(b: Base) : Base by b
+//class Derived(b: Base) : Base by b
 
 fun main(args: Array<String>) {
+    var dog: Dog = Dog("Kai")
+    var cat: Cat = Cat("Roy")
+    var dog2: Dog = Dog(null)
+    var cat2: Cat = Cat(null)
+    var tbl: Table = Table("table")
+    dog.message()
+    dog2.message()
+    cat.message()
+    cat2.message()
+    messageObj(null)
+    cat.myName()
+    Derived(dog).myName()
 
-    nullableTest(2)
-    nullableTest(null)
+//    val user = User()
+//    user.name = "first"
+//    user.name = "second"
+//    println(lazyValue)
 
-    val member: Member = Member()
-    nameLength(member)
-    var sum: Int = 0
-    listOf(1,2,3).filter { it > 0 }.forEach {
-        sum += it
-    }
-    print(sum)
-
-    val b = BaseImpl(10)
-    Derived(b).print()
+//    println(lazyValue)
+//    var c = Child()
+//    c.foo()
+//
+//    val b = BaseImpl(10)
+//    Derived(b).print()
 }
 
